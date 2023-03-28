@@ -1,11 +1,11 @@
 @echo off
 
-set UE_Version=4.27
-set Project_Name=LevelZero
+set UE_Version=5.2
+set Project_Name=MyProjectName
 rem for 4.x
-set UBT_Path=\Engine\Binaries\DotNET\UnrealBuildTool.exe
+rem set UBT_Path=\Engine\Binaries\DotNET\UnrealBuildTool.exe
 rem for 5.x
-rem set UBT_Path=\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.exe
+set UBT_Path=\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.exe
 
 echo Deleting....
 
