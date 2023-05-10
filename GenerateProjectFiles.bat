@@ -1,11 +1,12 @@
 @echo off
 
 set UE_Version=5.2
-set Project_Name=MyProjectName
+set Project_Name=BRG
 rem for 4.x
-rem set UBT_Path=\Engine\Binaries\DotNET\UnrealBuildTool.exe
+rem set UBT_Path=\Engine\Binaries\DotNET\UnrealBuildTool
 rem for 5.x
-set UBT_Path=\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.exe
+set UBT_Path=\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool
+set UE_Rebuild=\Engine\Build\BatchFiles\Rebuild.bat
 
 echo Deleting....
 
@@ -35,20 +36,38 @@ if not exist "%UE_Path%" (
 
 echo Done
 echo.
-echo Serching for UnrealBuildTool....
+echo Serching for Unreal Build Tools....
 
 set UBT_Path="%UE_Path%%UBT_Path%"
+set UE_Rebuild="%UE_Path%%UE_Rebuild%"
 
-if not exist %UBT_Path% (
+if not exist %UBT_Path%.exe (
 	echo [Error] Invalid UnrealBuildTool Path:
-	echo %UBT_Path%
+	echo %UBT_Path%.exe
 	pause
 	exit /b
 )
 
-echo UnrealBuildTool Path: %UBT_Path%
+if not exist %UBT_Path%.dll (
+	echo [Error] Invalid UnrealBuildTool Path:
+	echo %UBT_Path%.dll
+	pause
+	exit /b
+)
+
+if not exist %UE_Rebuild% (
+	echo [Error] Invalid Rebuild BatchFile Path:
+	echo %UE_Rebuild%
+	pause
+	exit /b
+)
+
+echo UnrealBuildTool Path: %UBT_Path%.exe
+echo UnrealBuildTool Path: %UBT_Path%.dll
+echo Rebuild BatchFile Path: %UE_Rebuild%
 echo Done
 echo.
+
 echo Serching for Project....
 
 set UE_Project_Path="%cd%\%Project_Name%.uproject"
@@ -65,7 +84,7 @@ echo Done
 echo.
 echo Generate Project Files....
 
-%UBT_Path% -projectfiles -project=%UE_Project_Path% -game -rocket -progress
+%UBT_Path%.exe -projectfiles -project=%UE_Project_Path% -game -rocket -progress
 
 set VS_Project_Path="%cd%\%Project_Name%.sln"
 
@@ -78,14 +97,11 @@ if not exist %VS_Project_Path% (
 
 echo Done
 echo.
+echo Compiling Project....
 
-echo Starting Visual Studio....
-
-%VS_Project_Path%
+dotnet %UBT_Path%.dll %Project_Name%Editor Win64 Development -Project=%UE_Project_Path% -WaitMutex -FromMsBuild -Rebuild
 
 echo Done
 echo.
-echo Don't forget to commit and push Your work.
-echo Have a nice day!
-echo.
+
 pause
