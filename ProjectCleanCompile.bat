@@ -1,6 +1,6 @@
 @echo off
 
-set UE_Version=5.2
+set UE_Version=5.3
 set Project_Name=BRG
 rem for 4.x
 rem set UBT_Path=\Engine\Binaries\DotNET\UnrealBuildTool
@@ -8,6 +8,10 @@ rem for 5.x
 set UBT_Path=\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool
 set UE_Rebuild=\Engine\Build\BatchFiles\Rebuild.bat
 
+echo /////////////////////////
+echo Clean and compile project
+echo /////////////////////////
+echo.
 echo Deleting....
 
 if exist %Project_Name%.sln (
@@ -103,13 +107,3 @@ dotnet %UBT_Path%.dll %Project_Name%Editor Win64 Development -Project=%UE_Projec
 
 echo Done
 echo.
-echo Starting Visual Studio....
-
-%VS_Project_Path%
-
-echo Done
-echo.
-echo Don't forget to commit and push Your work.
-echo Have a nice day!
-echo.
-pause
